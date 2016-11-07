@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "RCObject.h"
 /*引用计数类*/
 class String
 {
@@ -12,17 +13,8 @@ public:
 	~String();
 
 private:
-	struct StringValue {
-		int refCount;
+	struct StringValue:public RCObject {
 		char* vdata;
-
-		/*可共享标志，防止出现先创建指针再赋值的情况：
-		String s1 = "Hello" ;
-		char *p = &s1[1] ;
-		String s2 = s1 ; 
-		可共享：true  */
-		bool shareable; 
-
 
 		StringValue(const char* initValue);
 		~StringValue();

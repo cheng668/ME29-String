@@ -1,9 +1,10 @@
 #include "String.h"
 
-String::StringValue::StringValue(const char* initValue) :refCount(1), shareable(true)
+String::StringValue::StringValue(const char* initValue)
 {
 	vdata = new char[strlen(initValue) + 1];
 	strcpy(vdata, initValue);
+	addReference();
 }
 
 String::StringValue::~StringValue() {
@@ -16,15 +17,15 @@ String::String(const char* initValue):value(new StringValue(initValue))
 
 String::~String()
 {
-	if (--value->refCount == 0) delete value;  //引用计数为0才释放内存
+	value->removeReference();  //引用计数为0才释放内存
 }
 
 String::String(const String& rhs)
 {
-	if (value->shareable)  //共享标志为true
+	if (value->isShareable())  //共享标志为true
 	{
 		value = rhs.value;
-		++value->refCount; //共享内存，只增加引用数
+		value->addReference(); //共享内存，只增加引用数
 	}
 	else
 	{
@@ -39,13 +40,19 @@ String& String::operator=(const String& rhs)
 		return *this;
 	}
 
-	if (--value->refCount == 0)  //原计数值减一，如果为0，则删除内存
-	{
-		delete value;
-	}
+	value->removeReference(); //原计数值减一，如果为0，则删除内存	
+		
 	//指针指向新值，计数值加一
-	value = rhs.value;
-	++value->refCount;
+	if (rhs.value->isShareable())
+	{
+		value = rhs.value;
+		value->addReference();
+	}
+	else
+	{
+		value = new StringValue(rhs.value->vdata);
+	}
+
 	return *this;
 }
 
@@ -56,12 +63,12 @@ const char& String::operator[](int index) const
 
 char& String::operator[](int index)
 {
-	if (value->refCount > 1)
+	if (value->isShared())
 	{
-		--value->refCount;
+		value->removeReference();
 		value = new StringValue(value->vdata);
 	}
-	value->shareable = false;  //可共享标志置false
+	value->markUnshareable();  //可共享标志置false
 	return value->vdata[index];
 }
 
