@@ -1,24 +1,22 @@
 #pragma once
 #include <string>
 #include "RCObject.h"
+#include "RCPtr.h"
 /*引用计数类*/
 class String
 {
 public:
 	explicit String(const char* initValue = "");
-	explicit String(const String& rhs);
-	String& operator=(const String& rhs);
 	const char& operator[](int index) const;
 	char& operator[](int index);
-	~String();
-
 private:
 	struct StringValue:public RCObject {
 		char* vdata;
-
+		StringValue(const StringValue& rhs);
 		StringValue(const char* initValue);
+		void init(const char* initValue);
 		~StringValue();
 	};
-	StringValue* value;
+	RCPtr<StringValue> value;
 };
 
