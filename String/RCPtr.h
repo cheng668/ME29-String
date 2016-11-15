@@ -14,7 +14,7 @@ private:
 	T* pointee;
 	void init();
 };
-/*¹¤¾ßº¯Êı£¬ÓÃÓÚÅĞ¶Ï¹²Ïí¿ª¹ØÊÇ·ñ´ò¿ª£¬²¢Ôö´ó¼ÆÁ¿Êı*/
+/*å·¥å…·å‡½æ•°ï¼Œç”¨äºåˆ¤æ–­å…±äº«å¼€å…³æ˜¯å¦æ‰“å¼€ï¼Œå¹¶å¢å¤§è®¡é‡æ•°*/
 template<class T>
 void
 RCPtr<T>::init()
@@ -29,19 +29,19 @@ RCPtr<T>::init()
 	}
 	pointee->addReference();
 }
-/*¹ÜÀíÀàRCObject¼Ì³ĞÀàÖ¸ÕëpointeeµÄ¹¹Ôìº¯Êı*/
+/*ç®¡ç†ç±»RCObjectç»§æ‰¿ç±»æŒ‡é’ˆpointeeçš„æ„é€ å‡½æ•°*/
 template<class T>
 RCPtr<T>::RCPtr(T* realPtr /* = 0 */) :pointee(realPtr)
 {
 	init();
 }
-/*¿½±´¸³Öµ¹¹Ôìº¯Êı*/
+/*æ‹·è´èµ‹å€¼æ„é€ å‡½æ•°*/
 template<class T>
 RCPtr<T>::RCPtr(const RCPtr& rhs) :pointee(rhs.pointee)
 {
 	init();
 }
-/*Îö¹¹º¯Êı£¬ÊÍ·ÅÖ¸Õë*/
+/*ææ„å‡½æ•°ï¼Œé‡Šæ”¾æŒ‡é’ˆ*/
 template<class T>
 RCPtr<T>::~RCPtr()
 {
@@ -50,7 +50,7 @@ RCPtr<T>::~RCPtr()
 		pointee->removeReference();
 	}
 }
-/*¿½±´¸³Öµº¯Êı£¬¼õĞ¡Ô­ÓĞÖ¸Õë¶ÔÏóµÄ¼ÆÁ¿Êı£¬²¢ÖØĞÂ¿½±´¸³Öµ£¬»òÕßÍ¨¹ıinit()¿½±´¹¹ÔìĞÂ¶ÔÏó£¬×îºóÔö¼Ó¼ÆÁ¿Êı*/
+/*æ‹·è´èµ‹å€¼å‡½æ•°ï¼Œå‡å°åŸæœ‰æŒ‡é’ˆå¯¹è±¡çš„è®¡é‡æ•°ï¼Œå¹¶é‡æ–°æ‹·è´èµ‹å€¼ï¼Œæˆ–è€…é€šè¿‡init()æ‹·è´æ„é€ æ–°å¯¹è±¡ï¼Œæœ€åå¢åŠ è®¡é‡æ•°*/
 template<class T>
 RCPtr<T>&
 RCPtr<T>::operator =(const RCPtr& rhs)
@@ -61,20 +61,20 @@ RCPtr<T>::operator =(const RCPtr& rhs)
 		{
 			pointee->removeReference();
 		}
-		pointee = rhs.pointee;//µ÷ÓÃRCObject¼Ì³ĞÀà¶ÔÏóµÄ¿½±´¸³Öµº¯Êı£¬´ËÀıÖĞµ÷ÓÃStringValueÀàµÄÄ¬ÈÏ¿½±´¸³Öµº¯Êı£¬½øĞĞÇ³¿½±´
+		pointee = rhs.pointee;//æŒ‡é’ˆèµ‹å€¼ï¼Œè¿›è¡Œæµ…æ‹·è´
 		init();
 		
 	}
 	return *this;
 }
-/*·µ»ØÖ¸Õë*/
+/*è¿”å›æŒ‡é’ˆ*/
 template<class T>
 T*
 RCPtr<T>::operator ->() const
 {
 	return pointee;
 }
-/*·µ»ØÒıÓÃ*/
+/*è¿”å›å¼•ç”¨*/
 template<class T>
 T&
 RCPtr<T>::operator &() const
